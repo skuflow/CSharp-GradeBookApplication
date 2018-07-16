@@ -56,8 +56,7 @@ namespace GradeBook.UserInterfaces
 
             else if (name != "standard" && name != "ranked")
             {
-                string userMessage = ($"{command}  is not a supported type of gradebook, please try again");
-                Console.Write(userMessage);
+                Console.Write($"{0} is not a supported type of gradebook, please try again ",command);
             }
         }
 
