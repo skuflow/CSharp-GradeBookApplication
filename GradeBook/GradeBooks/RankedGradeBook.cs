@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using GradeBook.Enums;
@@ -15,17 +16,37 @@ namespace GradeBook.GradeBooks
 
         public override char GetLetterGrade(double averageGrade)
         {
-            char returnValue = 'F';
+            char returnValue = '';
 
             if (Students.Count < 5)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Ranked grading requires at least 5 students.");
             }
 
-            if (averageGrade > .8) returnValue = 'A';
-            if (averageGrade > .6 && averageGrade <= .8) returnValue = 'B';
-            if (averageGrade > .4 && averageGrade <= .6) returnValue = 'C';
-            if (averageGrade > .2 && averageGrade <= .4) returnValue = 'D';
+            var threshold = (int)Math.Ceiling(Students.Count * .2);
+            var grades = Students.OrderByDescending(x => x.AverageGrade).Select( i => i.AverageGrade).ToList();
+
+            if (grades[threshold - 1] <= averageGrade)
+            {
+                returnValue = 'A';
+            }
+            else if (grades[(threshold*2) - 1] <= averageGrade)
+            {
+                returnValue = 'B';
+            }
+            else if (grades[(threshold * 3) - 1] <= averageGrade)
+            {
+                returnValue = 'C';
+            }
+            else if (grades[(threshold * 4) - 1] <= averageGrade)
+            {
+                returnValue = 'D';
+            }
+            else
+            {
+                returnValue = 'F';
+            }
+
             return returnValue;
         }
     }
